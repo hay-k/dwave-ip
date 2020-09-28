@@ -1,4 +1,4 @@
-from integer_bqm import IntegerBQM, VarType
+from core.integer_bqm import IntegerBQM, VarType
 import dimod
 
 
@@ -11,5 +11,5 @@ if __name__ == '__main__':
     ibqm.add_interaction('y', 'y', 1)
 
     sampler = dimod.SimulatedAnnealingSampler()
-    print(ibqm.sample(sampler, num_reads=20).lowest().first)
+    print(ibqm.sample(sampler, num_reads=10).record)
 
