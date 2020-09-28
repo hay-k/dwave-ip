@@ -143,6 +143,9 @@ class IntegerBQM:
             else:
                 self._bqm.add_interaction((u, i), (v, j), bias * u_bc[i] * v_bc[j])
 
+    def add_offset(self, offset):
+        self._bqm.add_offset(offset)
+
     def sample(self, sampler, *args, **kwargs):
         """
         Sample the integer quadratic model with the given sampler. This will sample the underlying
