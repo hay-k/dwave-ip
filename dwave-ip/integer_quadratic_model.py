@@ -17,15 +17,15 @@ class IntegerQuadraticModel:
     """
     A wrapper class to enable encoding and sampling integer variables with Dwave.
     Uses a dimod.BinaryQuadraticModel under the hood, with dimod.BINARY variable type.
-    IntegerBQM has its own definitions for variable types listed in the VarType enum.
-    Three variable types are supported: BINARY, UINT (unsigned integer) and INT (signed integer).
+    IntegerQuadraticModel has its own definitions for variable types listed in the VarType enum.
+    Three types of variables are supported: BINARY, UINT (unsigned integer) and INT (signed integer).
     To encode integers into an annealing device, their binary representation is used:
     for UINTs - ordinary binary expansion, and for INTs - two's complement expansion.
     """
 
     def __init__(self):
         """
-        Initialize an empty IntegerBQM object.
+        Initialize an empty IntegerQuadraticModel object.
         Member variables uint_precision and int_precision are set to 15 and 16 bits by default. They can be overridden,
         before any variable is added to the object.
 
