@@ -13,7 +13,7 @@ class VarType(IntEnum):
     INT = 2
 
 
-class IntegerBQM:
+class IntegerQuadraticModel:
     """
     A wrapper class to enable encoding and sampling integer variables with Dwave.
     Uses a dimod.BinaryQuadraticModel under the hood, with dimod.BINARY variable type.
@@ -30,9 +30,9 @@ class IntegerBQM:
         before any variable is added to the object.
 
         Example:
-            >>> ibqm = IntegerBQM()
-            >>> ibqm.uint_precision = 31
-            >>> ibqm.int_precision = 32
+            >>> iqm = IntegerQuadraticModel()
+            >>> iqm.uint_precision = 31
+            >>> iqm.int_precision = 32
         """
         self._bqm = dimod.BinaryQuadraticModel({}, {}, 0.0, dimod.BINARY)
         self._vartype_map = {}
@@ -114,7 +114,7 @@ class IntegerBQM:
         """
         Add an interaction term into the model. The variables u and v should both be added to the model
         with the add_variable function before this function is called. If any variable does not have a
-        liear term and participates only in interactions, it still needs to be added with add_variable first
+        linear term and participates only in interactions, it still needs to be added with add_variable first
         with bias=0.0. Multiple runs of the function with the same variable names will add up the biases just
         like the add_interaction function in Dwave's BinaryQuadraticModel.
 
@@ -144,6 +144,12 @@ class IntegerBQM:
                 self._bqm.add_interaction((u, i), (v, j), bias * u_bc[i] * v_bc[j])
 
     def add_offset(self, offset):
+        """
+        Add offset (constant shift in energy) to the quadratic model.
+
+        Args:
+            offset numeric: The offset to add.
+        """
         self._bqm.add_offset(offset)
 
     def sample(self, sampler, *args, **kwargs):
@@ -156,7 +162,7 @@ class IntegerBQM:
         integer values. This is because Dwave's printing functionality does not support integers, but
         SampleSet object does indeed contain integers, this is just an issue with printing. If you desparately
         need printing, then you can just print the record inside the SampleSet object
-            >>> sampleset = ibqm.sample(sampler, num_reads=10)
+            >>> sampleset = iqm.sample(sampler, num_reads=10)
             >>> print(sampleset.record)
 
         Args:
