@@ -100,8 +100,8 @@ class IntegerQuadraticModel:
         Returns:
             The list of corresponding binary variable labels added to the underlying binary quadratic model.
         """
-        if self._vartype_map.get(vartype, None):
-            if vartype != self._vartype_map.get(vartype, None):
+        if v in self._vartype_map:
+            if vartype != self._vartype_map[v]:
                 raise ValueError(f"vartype {vartype} does not match with previously specified one")
         else:
             if vartype is None:
