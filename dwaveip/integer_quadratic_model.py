@@ -100,12 +100,16 @@ class IntegerQuadraticModel:
         Returns:
             The list of corresponding binary variable labels added to the underlying binary quadratic model.
         """
-        if v in self._vartype_map:
-            if vartype != self._vartype_map[v]:
-                raise ValueError(f"vartype {vartype} does not match with previously specified one")
-        else:
-            if vartype is None:
+        if vartype is None:
+            if v in self._vartype_map:
+                vartype = self._vartype_map[v]
+            else:
                 raise ValueError("Variable not defined previously. The vartype argument must be non-None")
+        else:
+            if v in self._vartype_map and vartype != self._vartype_map[v]:
+                raise ValueError(f"vartype {vartype} does not match with previously specified one")
+            elif v in self._vartype_map:
+                vartype = self._vartype_map[v]
 
         bc = self._binary_coefficients(vartype)
         self._vartype_map[v] = vartype
