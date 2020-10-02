@@ -82,9 +82,9 @@ class IntegerQuadraticModel:
         """
         Add a variable and/or its bias. If the variable is being added the first time,
         the vartype argument is mandatory. Otherwise, it is optional, however if specified
-        it should be the same as when the variable was first added. Multiple calls to this
-        function with the same variable label will add up the biases, just like the add_variable
-        function in Dwave's BinaryQuadraticModel.
+        it should be the same as when the variable was first added. Different variables can
+        have different types. Multiple calls to this function with the same variable label will
+        add up the biases, just like the add_variable function in Dwave's BinaryQuadraticModel.
 
         This function will use the binary expansion corresponding to the variable type, to encode
         corresponding number of binary variables to the underlying binary quadratic model. Each
