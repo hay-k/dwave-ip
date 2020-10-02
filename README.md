@@ -1,5 +1,5 @@
 # dwave-ip
-A wrapper package over D-Wave Ocean providing functionality to encode and sample integer variables.
+A wrapper package over D-Wave Ocean providing functionality to encode and sample integer variables, as well as solve integer linear programming (ILP) problems with equality constraints.
 
 D-Wave currently supports three types of variables (SPIN, BINARY and DISCRETE) and they [seem to have plans](https://github.com/dwavesystems/dimod/issues/664) to support integer variables at the fundamental level as well, however the functionality is not available yet. dwave-ip implements a simple wrapper over D-Wave's API to allow easy and straightforward handling of integer variables.
 
