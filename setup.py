@@ -9,7 +9,7 @@ setup(name='dwaveip',
       author='Hayk Sargsyan',
       # author_email='',
       url='https://github.com/hay-k/dwave-ip',
-      pckages=['dwaveip'],
+      packages=['dwaveip'],
       license='MIT License',
       install_requires=REQUIREMENTS,
       python_requires='>=3.6'
