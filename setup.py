@@ -4,7 +4,7 @@ with open('requirements.txt') as fh:
     REQUIREMENTS = fh.read().split('\n')
 
 setup(name='dwaveip',
-      version='0.0.0',
+      version='0.0.1',
       description='A package to handle integers with Dwave',
       author='Hayk Sargsyan',
       # author_email='',
