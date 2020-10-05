@@ -165,7 +165,7 @@ class IntegerQuadraticModel:
 
         for i,j in product(range(len(u_bc)), range(len(v_bc))):
             if (i == j) and (u == v):
-                self._bqm.add_variable((u, i), u_bc[i] ** 2)
+                self._bqm.add_variable((u, i), bias * u_bc[i] ** 2)
             else:
                 self._bqm.add_interaction((u, i), (v, j), bias * u_bc[i] * v_bc[j])
 
