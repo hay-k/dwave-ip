@@ -6,8 +6,8 @@ class TestIntegerQuadraticModel(unittest.TestCase):
 
     def test_init(self):
         iqm = IntegerQuadraticModel()
-        self.assertEqual(15, iqm.uint_precision)
-        self.assertEqual(16, iqm.int_precision)
+        self.assertEqual(4, iqm.uint_precision)
+        self.assertEqual(5, iqm.int_precision)
 
     def test_add_variable(self):
         iqm = IntegerQuadraticModel()

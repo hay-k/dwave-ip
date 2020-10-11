@@ -48,19 +48,19 @@ class IntegerQuadraticModel:
         """
         Initialize an empty IntegerQuadraticModel object.
 
-        Member variables uint_precision and int_precision are set to 15 and 16 bits by default.
+        Member variables uint_precision and int_precision are set to 4 and 5 bits by default.
         They can be overridden, before any variable is added to the model.
 
         Example:
             >>> iqm = IntegerQuadraticModel()
-            >>> iqm.uint_precision = 31
-            >>> iqm.int_precision = 32
+            >>> iqm.uint_precision = 8
+            >>> iqm.int_precision = 8
         """
         self._bqm = dimod.BinaryQuadraticModel({}, {}, 0.0, dimod.BINARY)
         self._vartype_map = {}
 
-        self.uint_precision = 15
-        self.int_precision = 16
+        self.uint_precision = 4
+        self.int_precision = 5
 
     @property
     def uint_precision(self):
