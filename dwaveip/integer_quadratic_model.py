@@ -44,23 +44,27 @@ class IntegerQuadraticModel:
     for UINTs - ordinary binary expansion, and for INTs - two's complement expansion.
     """
 
-    def __init__(self):
+    def __init__(self, params=None):
         """
-        Initialize an empty IntegerQuadraticModel object.
+        Initialize an empty IntegerQuadraticModel object with the given parameters.
 
-        Member variables uint_precision and int_precision are set to 4 and 5 bits by default.
-        They can be overridden, before any variable is added to the model.
+        Currently two parameters are available: 'int_precision' and 'uint_precision'.
+        If params is None or some parameter is not provided it will be set to its default value
+        according to {'uint_precision': 4, 'int_precision': 5}. The parameters are not allowed
+        to be overridden after any variables are added to the model.
 
-        Example:
-            >>> iqm = IntegerQuadraticModel()
-            >>> iqm.uint_precision = 8
-            >>> iqm.int_precision = 8
+        Args:
+            params dict: a python dict object of parameter name - value pairs.
+
+        Examples:
+            >>> iqm = IntegerQuadraticModel({'uint_precision': 8, 'int_precision': 8})
         """
         self._bqm = dimod.BinaryQuadraticModel({}, {}, 0.0, dimod.BINARY)
         self._vartype_map = {}
 
-        self.uint_precision = 4
-        self.int_precision = 5
+        params = params or {}
+        self.uint_precision = params.get('uint_precision', 4)
+        self.int_precision = params.get('int_precision', 5)
 
     @property
     def uint_precision(self):
@@ -68,11 +72,10 @@ class IntegerQuadraticModel:
 
     @uint_precision.setter
     def uint_precision(self, value):
-        if len(self._vartype_map):
-            raise ValueError("Changing UINT precision on a non-empty model is not allowed")
-        if not isinstance(value, int) or value <= 0:
-            raise ValueError("UINT precision must be a positive integer")
-        self._uint_precision = value
+        if not self._vartype_map:
+            self._uint_precision = value
+        else:
+            raise ValueError("Overriding UINT precision on a non-empty model is not allowed.")
 
     @property
     def int_precision(self):
@@ -80,11 +83,10 @@ class IntegerQuadraticModel:
 
     @int_precision.setter
     def int_precision(self, value):
-        if len(self._vartype_map):
-            raise ValueError("Changing int precision on a non-empty model is not allowed")
-        if not isinstance(value, int) or value <= 0:
-            raise ValueError("INT precision must be a positive integer")
-        self._int_precision = value
+        if not self._vartype_map:
+            self._int_precision = value
+        else:
+            raise ValueError("Overriding INT precision on a non-empty model is not allowed.")
 
     def _binary_coefficients(self, vartype):
         """
@@ -192,7 +194,7 @@ class IntegerQuadraticModel:
             >>> print(sampleset.record)
 
         Args:
-            sampler: A Dwave sampler.
+            sampler: A D-Wave sampler.
             *args: Positional arguments to the sampler's sample() function.
             **kwargs: Keyword arguments to the sampler's sample() function.
 
