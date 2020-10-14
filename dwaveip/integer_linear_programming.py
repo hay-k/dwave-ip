@@ -25,12 +25,12 @@ from itertools import product
 
 class IntegerLinearProgramming:
     """
-    Solve integer linear programming problems with equality constraints using D'Wave.
+    Solve integer linear programming problems with equality constraints using D-Wave.
     """
-    def __init__(self, c, a, b, vartypes):
+    def __init__(self, c, a, b, vartypes, iqm_params=None, weight=None):
         """
         Initialize an ILP problem and encode into a IntegerQuadraticModel.
-        It is assumed that the problem is given as follows: minimize c^Tx given that ax=b, where
+        It is assumed that the problem is given as follows: maximize c^Tx given that ax=b, where
         c and x are vectors of size n, a is an nxm matrix, b is a vector of size m. n is the number
         of variables, m is the number of equality constraints.
 
@@ -38,11 +38,13 @@ class IntegerLinearProgramming:
             c numpy array: The coefficients in the minimization objective.
             a numpy array: The matrix of coefficients of the equality constraints.
             b numpy array: The RHS of the equality constraints.
-            vartypes list: Entry at i'th index specifies the VarType of i'th variable x
+            vartypes list: Entry at i'th index specifies the VarType of i'th variable x.
+            iqm_params dict: The parameters for the underlying IntegerQuadraticModel.
+            weight numeric: The relative weight of the part of the QUBO due to the constraints.
         """
-        iqm = IntegerQuadraticModel()
+        iqm = IntegerQuadraticModel(iqm_params)
         for i in range(len(c)):
-            iqm.add_variable(f"x_{i}", c[i], vartypes[i])
+            iqm.add_variable(f"x_{i}", -c[i], vartypes[i])
 
         iqm.add_offset(b.T @ b)
 
@@ -50,10 +52,14 @@ class IntegerLinearProgramming:
         aTb = a.T @ b
         bTa = b.T @ a
 
+        if not weight:
+            # TODO: determine automatically (for inspiration see arXiv:1302.5843). For now set to 10.
+            weight = 10
+
         for i in range(len(c)):
-            iqm.add_variable(f"x_{i}", -(aTb + bTa)[i])
+            iqm.add_variable(f"x_{i}", -weight * (aTb + bTa)[i])
         for i,j in product(range(len(c)), repeat=2):
-            iqm.add_interaction(f"x_{i}", f"x_{j}", aTa[i, j])
+            iqm.add_interaction(f"x_{i}", f"x_{j}", weight * aTa[i, j])
 
         self._iqm = iqm
 
@@ -62,7 +68,7 @@ class IntegerLinearProgramming:
         Sample the underlying IntegerQuadraticModel.
 
         Args:
-            sampler: A D'Wave sampelr.
+            sampler: A D-Wave sampler.
             *args: Positional arguments to the sampler's sample() function.
             **kwargs: Keyword arguments to the sampler's sample() function.
 
